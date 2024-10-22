@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <div class="container mt-5">
+        <h2>Welcome, {{ user.username }}!</h2>
+        <p>Welcome to your health reporting dashboard. Here, you can view recent reports, submit new cases, and monitor ongoing issues in your area.</p>
+
+        <!-- Section for submitting a new report -->
+        <div class="mt-4">
+            <a href="#" class="btn btn-success">Submit a New Health Report</a>
+        </div>
+
+        <!-- Section for recent health reports -->
+        <div class="mt-5">
+            <h4>Recent Health Reports</h4>
+            <ul class="list-group">
+                {% for report in recent_reports %}
+                    <li class="list-group-item">
+                        <strong>{{ report.title }}</strong> - {{ report.date }}
+                    </li>
+                {% empty %}
+                    <li class="list-group-item">No recent reports available.</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Option to view profile or log out -->
+        <div class="mt-5 d-flex align-items-center">
+            <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-secondary mr-2">Logout</button>
+            </form>
+            <a href="#" class="btn btn-info">View Profile</a>
+        </div>
+
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
