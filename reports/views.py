@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from .forms import UserRegistrationForm
 from .models import UserProfile
@@ -39,14 +40,16 @@ def register(request):
         form = UserRegistrationForm()
     return render(request, 'reports/register.html', {'form': form})
 
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
 
 @login_required
 def dashboard(request):
     recent_reports = [
         {"title": "Malaria Outbreak in Region A", "date": "2024-10-01"},
         {"title": "Cholera Case in Village B", "date": "2024-09-25"},
+        {"title": "Marburg Outhbreak in Rwanda", "date": "2024-09-30"},
+        {"title": "MPox outbreak in East Africa", "date": "2024-09-01"},
+
+
     ]
     context = {
         "recent_reports": recent_reports,
