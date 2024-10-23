@@ -1,0 +1,20 @@
+body {
+    background-color: #f8f9fa;
+}
+.hero-section {
+    background: url("../images/coronavirus-pandemic.jpg") no-repeat center center;
+    background-size: cover;
+    color: #fff;
+    padding: 100px 0;
+    text-align: center;
+}
+.hero-section h1 {
+    font-size: 3rem;
+    font-weight: bold;
+}
+.hero-section p {
+    font-size: 1.2rem;
+}
+.cta-buttons a {
+    margin: 10px;
+}

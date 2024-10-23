@@ -1,10 +1,54 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Home</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Reporting Platform</title>
+    {% load static %}
+    <link rel="shortcut icon" href="{% static 'images/logo.png' %}" type="image/x-icon">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet">
 </head>
 <body>
-    <h2>Welcome to the Health Reporting Platform</h2>
-    <p><a href="{% url 'register' %}">Register</a> or <a href="{% url 'login' %}">Login</a></p>
+
+    <div class="hero-section">
+        <div class="container">
+            <h1>Welcome to the Health Reporting Platform</h1>
+            <p>Your one-stop solution for tracking and reporting health issues in your community.</p>
+            <div class="cta-buttons">
+                <a href="{% url 'register' %}" class="btn btn-primary btn-lg">Register</a>
+                <a href="{% url 'login' %}" class="btn btn-primary btn-lg">Login</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-4 text-center">
+                <img src="{% static 'images/submit.png' %}" alt="Health Reports" class="mb-3 rounded-circle">
+                <h3>Submit Health Reports</h3>
+                <p>Report health cases in your community to help authorities take timely action.</p>
+            </div>
+            <div class="col-md-4 text-center">
+                <img src="{% static 'images/analytics.png' %}" alt="Analytics" class="mb-3 rounded-circle">
+                <h3>View Reports Analytics</h3>
+                <p>Analyze trends and data on health cases reported in different regions.</p>
+            </div>
+            <div class="col-md-4 text-center">
+                <img src="{% static 'images/news.png' %}" alt="Community" class="mb-3 rounded-circle">
+                <h3>Stay Informed</h3>
+                <p>Get the latest updates on health reports and precautions to stay safe.</p>
+            </div>
+        </div>
+    </div>
+
+    <footer class="mt-5 py-4 bg-dark text-white text-center">
+        <div class="container">
+            <p>&copy; {% now "Y" %} Uncle Joe. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

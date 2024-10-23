@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import UserProfile
+from .models import *
 
 class UserRegistrationForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput)
@@ -21,3 +21,18 @@ class UserRegistrationForm(forms.ModelForm):
             self.add_error('confirm_password', "Passwords do not match.")
 
         return cleaned_data
+
+class UserProfileForm(forms.ModelForm):
+    """Form for updating the user profile."""
+    class Meta:
+        model = UserProfile
+        fields = ['phone_number', 'is_health_worker']
+
+class HealthReportForm(forms.ModelForm):
+    """Form for submitting a health report."""
+    class Meta:
+        model = HealthReport
+        fields = ['incident_type', 'description', 'location']
+        widgets = {
+            'reported_date': forms.DateInput(attrs={'type': 'date'}),
+        }
