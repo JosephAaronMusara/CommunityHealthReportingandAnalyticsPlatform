@@ -1,44 +1,71 @@
+{% load custom_filters %}
+{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{% static 'css/localversionBootstrap.css' %}" rel="stylesheet">
 </head>
 <body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="#">Health Dashboard for <i>{{ user.username | upper }}</i> - 
+                {% if user_profile.is_health_worker %}
+                <span><strong>Health Worker</strong></span>
+                {% else %}
+                <span><strong>Regular User</strong></span>
+                {% endif %}
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">View Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" 
+                          onClick="document.getElementById('logoutform').submit()">
+                          Logout
+                        </a>
+                      </li>
+                      <form id="logoutform" method="POST" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <input type="hidden">
+                      </form>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
     <div class="container mt-5">
-        <h2>Welcome, {{ user.username }}!</h2>
+
         <p>Welcome to your health reporting dashboard. Here, you can view recent reports, submit new cases, and monitor ongoing issues in your area.</p>
 
-        <!-- Section for submitting a new report -->
         <div class="mt-4">
             <a href="#" class="btn btn-success">Submit a New Health Report</a>
         </div>
 
-        <!-- Section for recent health reports -->
+        <!-- Section for recent health reports. Pamongo -->
         <div class="mt-5">
             <h4>Recent Health Reports</h4>
             <ul class="list-group">
-                {% for report in recent_reports %}
+                {% for report in reports %}
                     <li class="list-group-item">
-                        <strong>{{ report.title }}</strong> - {{ report.date }}
+                        <h4>{{ report.incident_type }} - {{ report.date_reported }}</h4>
+                        <p>{{ report.description }}</p>
                     </li>
                 {% empty %}
                     <li class="list-group-item">No recent reports available.</li>
                 {% endfor %}
             </ul>
         </div>
-
-        <!-- Option to view profile or log out -->
-        <div class="mt-5 d-flex align-items-center">
-            <form action="{% url 'logout' %}" method="post" style="display: inline;">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-secondary mr-2">Logout</button>
-            </form>
-            <a href="#" class="btn btn-info">View Profile</a>
-        </div>
-
     </div>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="{% static 'css/slim.js' %}"></script>
+    <script src="{% static 'css/localversionBootstrap.js' %}"></script>
 </body>
 </html>

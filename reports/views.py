@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from .forms import UserRegistrationForm
@@ -9,10 +9,6 @@ from .forms import HealthReportForm, UserRegistrationForm, UserProfileForm
 
 def home(request):
     """Render the home page."""
-    return render(request, 'home.html')
-
-
-def home(request):
     return render(request, 'reports/home.html')
 
 def register(request):
@@ -24,13 +20,6 @@ def register(request):
             user.set_password(password)
             user.save()
             
-            # phone_number = form.cleaned_data['phone_number']
-            # is_health_worker = form.cleaned_data['is_health_worker']
-            # UserProfile.objects.get_or_create(
-            #     user=user,
-            #     defaults={'phone_number': phone_number, 'is_health_worker': is_health_worker}
-            # )
-
             # Check if UserProfile already exists
             if not UserProfile.objects.filter(user=user).exists():
                 phone_number = form.cleaned_data['phone_number']
@@ -69,36 +58,37 @@ def register(request):
 
 # @login_required
 # def dashboard(request):
-#     recent_reports = [
-#         {"title": "Malaria Outbreak in Region A", "date": "2024-10-01"},
-#         {"title": "Cholera Case in Village B", "date": "2024-09-25"},
-#         {"title": "Marburg Outhbreak in Rwanda", "date": "2024-09-30"},
-#         {"title": "MPox outbreak in East Africa", "date": "2024-09-01"},
-
-
-#     ]
-#     context = {
-#         "recent_reports": recent_reports,
-#         "user": request.user,
+#     """User dashboard for submitting and viewing health reports."""
+#     reports = HealthReport.objects.filter(user=request.user)
+#     content = {'reports': reports,
+#                'user':request.user,
 #     }
-#     return render(request, 'reports/dashboard.html', context)
+#     return render(request, 'reports/dashboard.html', content)
+
 
 @login_required
 def dashboard(request):
     """User dashboard for submitting and viewing health reports."""
+    user_profile = get_object_or_404(UserProfile, user=request.user)
+    print(request.user)  
     reports = HealthReport.objects.filter(user=request.user)
-    return render(request, 'dashboard.html', {'reports': reports})
+    
+    content = {
+        'reports': reports,
+        'user_profile': user_profile,
+    }
+    return render(request, 'reports/dashboard.html', content)
+
 
 @login_required
 def health_worker_dashboard(request):
     """Dashboard for health workers to manage health reports."""
     if request.user.userprofile.is_health_worker:
         reports = HealthReport.objects.all()  # Show all reports to health workers
-        return render(request, 'health_worker_dashboard.html', {'reports': reports})
+        return render(request, 'reports/health_worker_dashboard.html', {'reports': reports})
     else:
         return redirect('dashboard')
     
-# views.py
 
 @login_required
 def profile_view(request):
@@ -111,9 +101,16 @@ def profile_view(request):
     else:
         profile_form = UserProfileForm(instance=request.user.userprofile)
     
-    return render(request, 'profile.html', {'profile_form': profile_form})
+    return render(request, 'reports/profile.html', {'profile_form': profile_form})
 
 # views.py
+@login_required
+def profile_view(request):
+    """Display the user's profile information."""
+    user_profile = get_object_or_404(UserProfile, user=request.user)
+    context = {'user_profile': user_profile}
+    return render(request, 'reports/profile.html', context)
+
 
 @login_required
 def submit_report(request):
@@ -128,5 +125,5 @@ def submit_report(request):
     else:
         form = HealthReportForm()
 
-    return render(request, 'submit_report.html', {'form': form})
+    return render(request, 'reports/submit_report.html', {'form': form})
 

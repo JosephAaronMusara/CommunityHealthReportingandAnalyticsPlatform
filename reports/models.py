@@ -57,7 +57,7 @@ class HealthReport(models.Model):
     '''
         actual health incidents reported by users.
     '''
-    user = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     incident_type = models.ForeignKey(IncidentType, on_delete=models.CASCADE)
     symptoms = models.ManyToManyField(Symptom)
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
