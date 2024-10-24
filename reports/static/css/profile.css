@@ -1,0 +1,38 @@
+body {
+    background-color: #f8f9fa;
+}
+.form-container {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    height: 100%;
+}
+.btn-custom {
+    width: 100%;
+}
+.page-title {
+    margin-bottom: 30px;
+}
+.profile-section {
+    margin-top: 20px;
+}
+.equal-height {
+    display: flex;
+}
+.back-arrow {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 24px;
+    color: #007bff;
+    cursor: pointer;
+}
+form ul li {
+    display: none;
+}
+
+form ul.errorlist li {
+    display: list-item;
+    color:red;
+}
