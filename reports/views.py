@@ -40,7 +40,6 @@ def register(request):
 def dashboard(request):
     """User dashboard for submitting and viewing health reports."""
     user_profile = get_object_or_404(UserProfile, user=request.user)
-    print(request.user)  
     reports = HealthReport.objects.filter(user=request.user)
     
     content = {
@@ -55,36 +54,42 @@ def health_worker_dashboard(request):
     """Dashboard for health workers to manage health reports."""
     if request.user.userprofile.is_health_worker:
         reports = HealthReport.objects.all()
-        return render(request, 'reports/health_worker_dashboard.html', {'reports': reports})
+        user_profile = get_object_or_404(UserProfile, user=request.user)
+        return render(request, 'reports/health_worker_dashboard.html', {'reports': reports,'user_profile':user_profile})
     else:
-        return redirect('dashboard')
+        return redirect('login')
  
 
 @login_required
 def profile_view(request):
-    """View and edit user profile, including password change."""
+    """View and edit user profile, and change password."""
     user_profile = get_object_or_404(UserProfile, user=request.user)
     
     if request.method == 'POST':
         profile_form = UserProfileForm(request.POST, instance=user_profile)
-        password_form = PasswordChangeForm(request.user, request.POST)
+        password_form = PasswordChangeForm(user=request.user)
         
-        if profile_form.is_valid() and password_form.is_valid():
-            profile_form.save()
-            user = password_form.save()
-            # Keep the user logged in after password change
-            update_session_auth_hash(request, user)
-            return redirect('profile')
+        if 'update_profile' in request.POST:
+            if profile_form.is_valid():
+                profile_form.save()
+                return redirect('profile')
+        
+        elif 'change_password' in request.POST:
+            password_form = PasswordChangeForm(request.user, request.POST)
+            if password_form.is_valid():
+                user = password_form.save()
+                update_session_auth_hash(request, user)
+                return redirect('profile')
+
     else:
         profile_form = UserProfileForm(instance=user_profile)
-        password_form = PasswordChangeForm(request.user)
-
-    context = {
+        password_form = PasswordChangeForm(user=request.user)
+    
+    return render(request, 'reports/profile.html', {
         'profile_form': profile_form,
         'password_form': password_form,
-        'user_profile': user_profile
-    }
-    return render(request, 'reports/profile.html', context)
+        'user_profile':user_profile
+    })
 
 
 @login_required
