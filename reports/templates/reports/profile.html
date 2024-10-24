@@ -1,0 +1,59 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link href="{% static 'css/localversionBootstrap.css' %}" rel="stylesheet">
+    <link href="{% static 'css/profile.css' %}" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+
+</head>
+<body>
+    <div class="container mt-5">
+
+        <a href="{% url 'dashboard' %}" class="back-arrow" data-toggle="tooltip" data-placement="right" title="Return to Dashboard">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+
+        <div class="text-center">
+            <h2 class="page-title">User Profile</h2>
+            <p>Welcome, {{ user_profile.user.username }}! Here you can update your profile and change your password.</p>
+        </div>
+
+        <div class="row profile-section equal-height">
+            <!-- Update Profile Form -->
+            <div class="col-md-6 d-flex">
+                <div class="form-container flex-fill">
+                    <h4>Edit Profile</h4>
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ profile_form.as_p }}
+                        <button type="submit" class="btn btn-primary btn-custom mt-3">Update Profile</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Change Password Form -->
+            <div class="col-md-6 d-flex">
+                <div class="form-container flex-fill">
+                    <h4>Change Password</h4>
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ password_form.as_p }}
+                        <button type="submit" class="btn btn-warning btn-custom mt-3">Change Password</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'js/slim.js' %}"></script>
+    <script src="{% static 'js/localversionBootstrap.js' %}"></script>
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
+</body>
+</html>
