@@ -24,7 +24,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
-                        <a href="#" class="nav-link">View Profile</a>
+                        <a href="{% url 'profile' %}" class="nav-link">View Profile</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#" 
@@ -46,7 +46,7 @@
         <p>Welcome to your health reporting dashboard. Here, you can view recent reports, submit new cases, and monitor ongoing issues in your area.</p>
 
         <div class="mt-4">
-            <a href="#" class="btn btn-success">Submit a New Health Report</a>
+            <a href="{% url 'submit_report' %}" class="btn btn-success">Submit a New Health Report</a>
         </div>
 
         <!-- Section for recent health reports. Pamongo -->
