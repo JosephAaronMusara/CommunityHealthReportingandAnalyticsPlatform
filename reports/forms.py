@@ -23,10 +23,27 @@ class UserRegistrationForm(forms.ModelForm):
         return cleaned_data
 
 class UserProfileForm(forms.ModelForm):
-    """Form for updating the user profile."""
+    first_name = forms.CharField(max_length=30, required=False)
+    last_name = forms.CharField(max_length=30, required=False)
+
     class Meta:
         model = UserProfile
-        fields = ['phone_number', 'is_health_worker']
+        fields = ['phone_number']
+
+    def __init__(self, *args, **kwargs):
+        super(UserProfileForm, self).__init__(*args, **kwargs)
+        if self.instance and self.instance.user:
+            self.fields['first_name'].initial = self.instance.user.first_name
+            self.fields['last_name'].initial = self.instance.user.last_name
+
+    def save(self, *args, **kwargs):
+        user_profile = super(UserProfileForm, self).save(*args, **kwargs)
+        user = user_profile.user
+        user.first_name = self.cleaned_data['first_name']
+        user.last_name = self.cleaned_data['last_name']
+        user.save()
+        return user_profile
+
 
 class HealthReportForm(forms.ModelForm):
     """Form for submitting a health report."""
