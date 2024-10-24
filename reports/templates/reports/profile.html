@@ -19,7 +19,7 @@
 
         <div class="text-center">
             <h2 class="page-title">User Profile</h2>
-            <p>Welcome, {{ user_profile.user.username }}! Here you can update your profile and change your password.</p>
+            <p>Welcome, {{ user_profile.user.first_name }}! Here you can update your profile and change your password.</p>
         </div>
 
         <div class="row profile-section equal-height">
@@ -30,11 +30,11 @@
                     <form method="post">
                         {% csrf_token %}
                         {{ profile_form.as_p }}
-                        <button type="submit" class="btn btn-primary btn-custom mt-3">Update Profile</button>
+                        <button type="submit" name="update_profile" class="btn btn-primary btn-custom mt-3">Update Profile</button>
                     </form>
                 </div>
             </div>
-
+        
             <!-- Change Password Form -->
             <div class="col-md-6 d-flex">
                 <div class="form-container flex-fill">
@@ -42,12 +42,12 @@
                     <form method="post">
                         {% csrf_token %}
                         {{ password_form.as_p }}
-                        <button type="submit" class="btn btn-warning btn-custom mt-3">Change Password</button>
+                        <button type="submit" name="change_password" class="btn btn-warning btn-custom mt-3">Change Password</button>
                     </form>
                 </div>
             </div>
         </div>
-    </div>
+        
     <script src="{% static 'js/slim.js' %}"></script>
     <script src="{% static 'js/localversionBootstrap.js' %}"></script>
     <script>
