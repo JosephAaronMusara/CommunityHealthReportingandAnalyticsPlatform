@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from .forms import UserRegistrationForm
-from .models import UserProfile, HealthReport
+from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib import messages
-from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth import update_session_auth_hash
 from .forms import HealthReportForm, UserRegistrationForm, UserProfileForm
+from .models import UserProfile, HealthReport
 
 def home(request):
     """Render the home page."""
@@ -36,36 +36,6 @@ def register(request):
         form = UserRegistrationForm()
     return render(request, 'reports/register.html', {'form': form})
 
-# def login_view(request):
-#     """Handle user login."""
-#     if request.method == 'POST':
-#         username = request.POST['username']
-#         password = request.POST['password']
-#         user = authenticate(request, username=username, password=password)
-#         if user is not None:
-#             login(request, user)
-#             return redirect('dashboard')
-#         else:
-#             error_message = "Invalid credentials. Please try again."
-#             return render(request, '/templates/reports/login.html', {'error_message': error_message})
-#     return render(request, '/templates/reports/login.html')
-
-# def logout_view(request):
-#     """Handle user logout."""
-#     logout(request)
-#     return redirect('home')
-
-
-# @login_required
-# def dashboard(request):
-#     """User dashboard for submitting and viewing health reports."""
-#     reports = HealthReport.objects.filter(user=request.user)
-#     content = {'reports': reports,
-#                'user':request.user,
-#     }
-#     return render(request, 'reports/dashboard.html', content)
-
-
 @login_required
 def dashboard(request):
     """User dashboard for submitting and viewing health reports."""
@@ -84,31 +54,36 @@ def dashboard(request):
 def health_worker_dashboard(request):
     """Dashboard for health workers to manage health reports."""
     if request.user.userprofile.is_health_worker:
-        reports = HealthReport.objects.all()  # Show all reports to health workers
+        reports = HealthReport.objects.all()
         return render(request, 'reports/health_worker_dashboard.html', {'reports': reports})
     else:
         return redirect('dashboard')
-    
+ 
 
 @login_required
 def profile_view(request):
-    """View and edit user profile."""
+    """View and edit user profile, including password change."""
+    user_profile = get_object_or_404(UserProfile, user=request.user)
+    
     if request.method == 'POST':
-        profile_form = UserProfileForm(request.POST, instance=request.user.userprofile)
-        if profile_form.is_valid():
+        profile_form = UserProfileForm(request.POST, instance=user_profile)
+        password_form = PasswordChangeForm(request.user, request.POST)
+        
+        if profile_form.is_valid() and password_form.is_valid():
             profile_form.save()
+            user = password_form.save()
+            # Keep the user logged in after password change
+            update_session_auth_hash(request, user)
             return redirect('profile')
     else:
-        profile_form = UserProfileForm(instance=request.user.userprofile)
-    
-    return render(request, 'reports/profile.html', {'profile_form': profile_form})
+        profile_form = UserProfileForm(instance=user_profile)
+        password_form = PasswordChangeForm(request.user)
 
-# views.py
-@login_required
-def profile_view(request):
-    """Display the user's profile information."""
-    user_profile = get_object_or_404(UserProfile, user=request.user)
-    context = {'user_profile': user_profile}
+    context = {
+        'profile_form': profile_form,
+        'password_form': password_form,
+        'user_profile': user_profile
+    }
     return render(request, 'reports/profile.html', context)
 
 
