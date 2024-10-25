@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import PasswordChangeForm
@@ -10,6 +11,35 @@ from .models import UserProfile, HealthReport
 def home(request):
     """Render the home page."""
     return render(request, 'reports/home.html')
+
+from django.contrib.auth.forms import AuthenticationForm
+
+def login_view(request):
+    """Custom login view to handle health worker redirection."""
+    form = AuthenticationForm(request, data=request.POST or None)
+
+    if request.method == 'POST':
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(request, username=username, password=password)
+            print(user)
+            if user is not None:
+                login(request, user)
+                # Check logged-in user type
+                if hasattr(user, 'userprofile') and user.userprofile.is_health_worker:
+                    return redirect('health_worker_dashboard')
+                else:
+                    return redirect('dashboard')
+            else:
+                # Authentication failed
+                error_message = "Invalid username or password. Please try again."
+                return render(request, 'reports/login.html', {'form': form, 'error_message': error_message})
+    else:
+        form = AuthenticationForm()
+
+    return render(request, 'reports/login.html', {'form': form})
+
 
 def register(request):
     if request.method == 'POST':

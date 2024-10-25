@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Worker Dashboard</title>
+    <link href="{% static 'css/localversionBootstrap.css' %}" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <div class="container mt-5">
+        <h2>Health Worker Dashboard</h2>
+        <p>Welcome, {{ user_profile.user.username }}! Here you can view and manage health reports assigned to you.</p>
+
+        <!-- Section for recent health reports -->
+        <div class="mt-5">
+            <h4>Assigned Health Reports</h4>
+            <ul class="list-group">
+                {% for report in reports %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>{{ report.incident_type }}</strong> - {{ report.date_reported }}
+                            <p class="mb-0"><small>Status: {{ report.is_verified }}</small></p>
+                        </div>
+                        {% comment %} <div>
+                            <a href="{% url 'report_detail' report.id %}" class="btn btn-primary btn-sm">View Details</a>
+                            <a href="{% url 'update_report_status' report.id %}" class="btn btn-warning btn-sm ml-2">Update Status</a>
+                        </div> {% endcomment %}
+                    </li>
+                {% empty %}
+                    <li class="list-group-item">No reports assigned to you.</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="mt-5 d-flex justify-content-end">
+            <form action="{% url 'logout' %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-secondary">Logout</button>
+            </form>
+        </div>
+    </div>
+    <script src="{% static 'js/slim.js' %}"></script>
+    <script src="{% static 'js/localversionBootstrap.js' %}"></script>
+</body>
+</html>
