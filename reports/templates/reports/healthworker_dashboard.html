@@ -1,0 +1,82 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Health Worker Dashboard</title>
+    <link href="{% static 'css/localversionBootstrap.css' %}" rel="stylesheet">
+    <link href="{% static 'css/dashboard.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
+</head>
+<body class="bg-light">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3 bg-dark text-white p-3">
+                <h4>Health Reporting System</h4>
+                <nav class="nav flex-column">
+                    <a class="nav-link text-white" href="{% url 'health_worker_dashboard' %}">Dashboard</a>
+                    <a class="nav-link text-white" href="{% url 'submit_report' %}">Submit Report</a>
+                    <a class="nav-link text-white" href="{% url 'profile' %}">Profile</a>
+                    <a class="nav-link text-white" href="{% url 'logout' %}">Logout</a>
+                </nav>
+            </div>
+            <div class="col-md-9 p-4">
+                <h2>Welcome, {{ user.username }}!</h2>
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5>Total Reports</h5>
+                                <p>{{ total_reports }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5>Resolved Cases</h5>
+                                <p>{{ resolved_cases }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5>Alerts</h5>
+                                <p>{{ recent_alerts }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="map" style="height: 400px;" class="mb-4"></div>
+                <h3>Recent Reports</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Incident Type</th>
+                            <th>Location</th>
+                            <th>Reported By</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for report in recent_reports %}
+                        <tr>
+                            <td>{{ report.incident_type }}</td>
+                            <td>{{ report.location }}</td>
+                            <td>{{ report.reported_by }}</td>
+                            <td>{{ report.date_reported }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4">No reports available.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="{% static 'js/dashboard.js' %}"></script>
+</body>
+</html>
