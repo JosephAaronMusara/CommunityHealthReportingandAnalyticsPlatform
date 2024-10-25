@@ -6,7 +6,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
 from .forms import HealthReportForm, UserRegistrationForm, UserProfileForm
-from .models import UserProfile, HealthReport
+from .models import *
 
 def home(request):
     """Render the home page."""
@@ -88,7 +88,23 @@ def health_worker_dashboard(request):
         return render(request, 'reports/health_worker_dashboard.html', {'reports': reports,'user_profile':user_profile})
     else:
         return redirect('login')
- 
+@login_required
+def healthworker_dashboard(request):
+    total_reports = HealthReport.objects.count()
+    resolved_cases = HealthReport.objects.filter(resolved=True).count()
+    recent_alerts = Alert.objects.all()[:5]
+    total_alerts = Alert.objects.count()
+    recent_reports = HealthReport.objects.order_by('-date_reported')[:10]
+
+    context = {
+        'total_reports': total_reports,
+        'resolved_cases': resolved_cases,
+        'recent_alerts': recent_alerts,
+        'recent_reports': recent_reports,
+        'total_alerts': total_alerts
+    }
+    return render(request, 'reports/healthworker_dashboard.html', context)
+
 
 @login_required
 def profile_view(request):
