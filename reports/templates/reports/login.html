@@ -1,16 +1,24 @@
 {% load custom_filters %}
 {% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="shortcut icon" href="{% static 'images/logo.png' %}" type="image/x-icon">
     <link href="{% static 'css/localversionBootstrap.css' %}" rel="stylesheet">
+    <link href="{% static 'css/authentication.css' %}" rel="stylesheet">
 </head>
 <body class="bg-light">
-    <div class="container mt-5">
+    <div class="container login-container">
+        <div class="system-name">
+            <img src="{% static 'images/logo.png' %}" alt="System Logo" style="height: 40px; margin-right: 10px;">
+            Health Reporting System
+        </div>
+
         <div class="row justify-content-center">
-            <div class="col-md-6">
+            <div class="col-md-8 col-lg-6">
                 <div class="card">
                     <div class="card-header text-center">
                         <h4>Login</h4>
@@ -28,8 +36,8 @@
                             </div>
                             <button type="submit" class="btn btn-primary btn-block">Login</button>
                         </form>
-                        <div class="mt-3">
-                            <a href="{% url 'register' %}" class="text-center">Don't have an account? Register here</a>
+                        <div class="mt-3 text-center">
+                            <a href="{% url 'register' %}" class="text-muted">Don't have an account? Register here</a>
                         </div>
                     </div>
                 </div>
