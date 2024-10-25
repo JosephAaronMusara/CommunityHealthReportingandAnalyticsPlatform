@@ -63,6 +63,7 @@ class HealthReport(models.Model):
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
     description = models.TextField()
     date_reported = models.DateTimeField(auto_now_add=True)
+    resolved = models.BooleanField(default=False)
     is_verified = models.BooleanField(default=False)
 
     def __str__(self):
