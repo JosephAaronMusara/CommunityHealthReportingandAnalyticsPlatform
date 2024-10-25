@@ -13,7 +13,11 @@
 <body>
     <div class="container mt-5">
 
-        <a href="{% url 'dashboard' %}" class="back-arrow" data-toggle="tooltip" data-placement="right" title="Return to Dashboard">
+        <a href="{% if user.userprofile.is_health_worker %}
+            {% url 'health_worker_dashboard' %}
+            {% else %}
+            {% url 'dashboard' %}
+            {% endif %}" class="back-arrow" data-toggle="tooltip" data-placement="right" title="Return to Dashboard">
             <i class="fas fa-arrow-left"></i>
         </a>
 

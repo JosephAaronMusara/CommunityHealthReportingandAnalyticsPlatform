@@ -27,7 +27,12 @@
                 <textarea class="form-control" id="description" name="description" rows="3" placeholder="Provide details about the incident" required></textarea>
             </div>
             <button type="submit" class="btn btn-success">Submit Report</button>
-            <a href="{% url 'dashboard' %}" class="btn btn-secondary ml-2">Cancel</a>
+            <a href="{% if user.userprofile.is_health_worker %}
+            {% url 'health_worker_dashboard' %}
+            {% else %}
+            {% url 'dashboard' %}
+            {% endif %}
+            " class="btn btn-secondary ml-2">Cancel</a>
         </form>
     </div>
     <script src="{% static 'js/slim.js' %}"></script>
