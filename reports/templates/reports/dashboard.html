@@ -12,17 +12,15 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
         <div class="container">
             <a class="navbar-brand" href="#"><i>{{ user.first_name }}`s Dashboard</i>
-                {% comment %} {% if user_profile.is_health_worker %}
-                <span><strong>Health Worker</strong></span>
-                {% else %}
-                <span><strong>Regular User</strong></span>
-                {% endif %} {% endcomment %}
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a href="{% url 'submit_report' %}" class="nav-link">Add New Health Report</a> 
+                    </li>
                     <li class="nav-item">
                         <a href="{% url 'profile' %}" class="nav-link">View Profile</a>
                     </li>
@@ -43,11 +41,7 @@
 
     <div class="container mt-5">
 
-        <p>Welcome to your health reporting dashboard. Here, you can view recent reports, submit new cases, and monitor ongoing issues in your area.</p>
-
-        <div class="mt-4">
-            <a href="{% url 'submit_report' %}" class="btn btn-success">Submit a New Health Report</a>
-        </div>
+        <p>Welcome to your health reporting dashboard. Here, you can view recent reports, submit new cases, and view response on your reported cases.</p>
 
         <!-- Section for recent health reports. Pamongo -->
         <div class="mt-5">

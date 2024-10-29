@@ -9,19 +9,20 @@
 </head>
 <body class="bg-light">
     <div class="container mt-5">
-        <h2>Submit a New Health Report</h2>
+        <h2>New Health Report</h2>
         <p>Please fill out the form below to report a health incident.</p>
 
         <form method="post" action="{% url 'submit_report' %}" class="mt-4">
             {% csrf_token %}
             <div class="form-group">
                 <label for="incident_type">Incident Type</label>
-                <input type="text" class="form-control" id="incident_type" name="incident_type" placeholder="e.g., Malaria outbreak" required>
+                {{ form.incident_type }}
             </div>
             <div class="form-group">
                 <label for="location">Location</label>
-                <input type="text" class="form-control" id="location" name="location" placeholder="e.g., Harare, Zimbabwe" required>
+                {{ form.location }}
             </div>
+            
             <div class="form-group">
                 <label for="description">Description</label>
                 <textarea class="form-control" id="description" name="description" rows="3" placeholder="Provide details about the incident" required></textarea>

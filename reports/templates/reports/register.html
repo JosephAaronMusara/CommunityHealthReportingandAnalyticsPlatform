@@ -25,36 +25,53 @@
                     <div class="card-body">
                         <form method="POST">
                             {% csrf_token %}
-                            <div class="form-group">
-                                {{ form.username.label_tag }}
-                                {{ form.username|add_class:"form-control" }}
+                            <div class="form-group row align-items-center">
+                                <label class="col-sm-4 col-form-label" for="username">{{ form.username.label }}</label>
+                                <div class="col-sm-8">
+                                    {{ form.username|add_class:"form-control" }}
+                                </div>
                             </div>
-                            <div class="form-group">
-                                {{ form.first_name.label_tag }}
-                                {{ form.first_name|add_class:"form-control" }}
+                            <div class="form-group row align-items-center">
+                                <label class="col-sm-4 col-form-label" for="first_name">{{ form.first_name.label }}</label>
+                                <div class="col-sm-8">
+                                    {{ form.first_name|add_class:"form-control" }}
+                                </div>
                             </div>
-                            <div class="form-group">
-                                {{ form.email.label_tag }}
-                                {{ form.email|add_class:"form-control" }}
+                            <div class="form-group row align-items-center">
+                                <label class="col-sm-4 col-form-label" for="email">{{ form.email.label }}</label>
+                                <div class="col-sm-8">
+                                    {{ form.email|add_class:"form-control" }}
+                                </div>
                             </div>
-                            <div class="form-group">
-                                {{ form.phone_number.label_tag }}
-                                {{ form.phone_number|add_class:"form-control" }}
+                            <div class="form-group row align-items-center">
+                                <label class="col-sm-4 col-form-label" for="phone_number">{{ form.phone_number.label }}</label>
+                                <div class="col-sm-8">
+                                    {{ form.phone_number|add_class:"form-control" }}
+                                </div>
                             </div>
-                            <div class="form-group">
-                                {{ form.password.label_tag }}
-                                {{ form.password|add_class:"form-control" }}
+                            <div class="form-group row align-items-center">
+                                <label class="col-sm-4 col-form-label" for="password">{{ form.password.label }}</label>
+                                <div class="col-sm-8">
+                                    {{ form.password|add_class:"form-control" }}
+                                </div>
                             </div>
-                            <div class="form-group">
-                                {{ form.confirm_password.label_tag }}
-                                {{ form.confirm_password|add_class:"form-control" }}
+                            <div class="form-group row align-items-center">
+                                <label class="col-sm-4 col-form-label" for="confirm_password">{{ form.confirm_password.label }}</label>
+                                <div class="col-sm-8">
+                                    {{ form.confirm_password|add_class:"form-control" }}
+                                </div>
                             </div>
-                            <div class="form-group form-check">
-                                {{ form.is_health_worker }}
-                                {{ form.is_health_worker.label_tag }}
+                            <div class="form-group row align-items-center">
+                                <div class="col-sm-4">
+                                    {{ form.is_health_worker }}
+                                </div>
+                                <label class="col-sm-8 form-check-label" for="is_health_worker">
+                                    {{ form.is_health_worker.label }}
+                                </label>
                             </div>
                             <button type="submit" class="btn btn-primary btn-block">Register</button>
                         </form>
+                        
                         <div class="mt-3 text-center">
                             <a href="{% url 'login' %}" class="text-muted">Already have an account? Login here</a>
                         </div>

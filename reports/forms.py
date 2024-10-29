@@ -44,12 +44,34 @@ class UserProfileForm(forms.ModelForm):
         user.save()
         return user_profile
 
-
 class HealthReportForm(forms.ModelForm):
-    """Form for submitting a health report."""
+    incident_type = forms.ModelChoiceField(
+        queryset=IncidentType.objects.all(),
+        widget=forms.Select(attrs={'class': 'form-control'}),
+        empty_label="Select Incident Type"
+    )
+    location = forms.ModelChoiceField(
+        queryset=Location.objects.all(),
+        widget=forms.Select(attrs={'class': 'form-control'}),
+        empty_label="Select Location"
+    )
+
     class Meta:
         model = HealthReport
-        fields = ['incident_type', 'description', 'location']
-        widgets = {
-            'reported_date': forms.DateInput(attrs={'type': 'date'}),
-        }
+        fields = ['incident_type', 'location', 'description']
+
+from django import forms
+
+class LoginForm(forms.Form):
+    username = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'class': 'form-control', 
+            'placeholder': 'Username'
+        })
+    )
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control', 
+            'placeholder': 'Password'
+        })
+    )
