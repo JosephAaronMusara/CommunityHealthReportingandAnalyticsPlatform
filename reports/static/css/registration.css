@@ -1,7 +1,7 @@
 .register-container {
     margin-top: 5%;
     padding: 2rem;
-    text-align: center;
+    text-align: left;
 }
 .card {
     border-radius: 10px;
@@ -26,6 +26,7 @@
     font-weight: bold;
     margin-bottom: 1rem;
     color: #333;
+    text-align: center;
 }
 @media (max-width: 767.98px) {
     .register-container {
