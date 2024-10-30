@@ -89,7 +89,7 @@ def healthworker_dashboard(request):
         resolved_cases = HealthReport.objects.filter(resolved=True).count()
         recent_alerts = Alert.objects.all()[:5]
         total_alerts = Alert.objects.count()
-        recent_reports = HealthReport.objects.order_by('-date_reported')[:10]
+        recent_reports = HealthReport.objects.order_by('-date_reported')[:5]
 
         context = {
             'total_reports': total_reports,
