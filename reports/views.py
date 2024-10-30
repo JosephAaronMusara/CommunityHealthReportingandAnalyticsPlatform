@@ -141,12 +141,16 @@ def profile_view(request):
 def submit_report(request):
     """Submit a new health report."""
     if request.method == 'POST':
+        user = request.user
         form = HealthReportForm(request.POST)
         if form.is_valid():
             report = form.save(commit=False)
             report.user = request.user
             report.save()
-            return redirect('dashboard')
+            if hasattr(user, 'userprofile') and user.userprofile.is_health_worker:
+                    return redirect('health_worker_dashboard')
+            else:
+                return redirect('dashboard')
     else:
         form = HealthReportForm()
 
