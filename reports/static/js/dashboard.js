@@ -54,3 +54,33 @@
         document.getElementById('trendChart'),
         config
     );
+
+    // Predictive Chart using Chart.js
+const predictiveChart = new Chart(document.getElementById('predictiveChart'), {
+    type: 'line',
+    data: {
+        labels: [/* labels for forecast dates */],
+        datasets: [{
+            label: 'Outbreak Likelihood (%)',
+            data: [/* outbreak probability data points */],
+            borderColor: 'rgba(255, 99, 132, 1)',
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+        }]
+    },
+    options: {
+        scales: {
+            y: { beginAtZero: true }
+        }
+    }
+});
+
+// Handle alert badge updates dynamically
+document.querySelector('.fa-bell').addEventListener('click', function() {
+    fetch('/mark_alerts_read')
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                document.querySelector('.badge-danger').style.display = 'none';
+            }
+        });
+});

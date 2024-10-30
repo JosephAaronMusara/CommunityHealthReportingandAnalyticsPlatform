@@ -12,4 +12,6 @@ urlpatterns = [
     path('health_worker_dashboard/', views.healthworker_dashboard, name='health_worker_dashboard'),
     path('profile/', views.profile_view, name='profile'),
     path('submit_report/', views.submit_report, name='submit_report'),
+    path('view_reports/', views.view_reports, name='view_reports'),
+    path('report/toggle/<int:report_id>/<str:field_name>/', views.toggle_report_field, name='toggle_report_field'),
 ]

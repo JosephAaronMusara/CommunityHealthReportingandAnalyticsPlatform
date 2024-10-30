@@ -4,47 +4,50 @@
 <head>
     <title>Health Worker Dashboard</title>
     <link href="{% static 'css/localversionBootstrap.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
 </head>
 <body class="bg-light">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-3 bg-dark text-white p-3">
-                <nav class="nav flex-column" style="position:fixed;">
-                    <h4>Health Reporting System</h4>
+            <!-- Sidebar Navigation -->
+            <div class="col-md-3 bg-dark text-white p-4" style="position: fixed; height: 100vh;">
+                <h4 class="mb-4">Health Reporting System</h4>
+                <nav class="nav flex-column">
                     <a class="nav-link text-white" href="{% url 'health_worker_dashboard' %}">Dashboard</a>
-                    <a class="nav-link text-white" href="#">View Reports</a>
-                    <a class="nav-link text-white" href="{% url 'submit_report' %}">Submit Report</a>
+                    <a class="nav-link text-white" href="{% url 'view_reports' %}">View Reports</a>
+                    <a class="nav-link text-white" href="{% url 'submit_report' %}">Add Report</a>
                     <a class="nav-link text-white" href="{% url 'profile' %}">Profile</a>
-                        <a class="nav-link text-white" href="#" 
-                          onClick="document.getElementById('logoutform').submit()">
-                          Logout
-                        </a>
-                      <form id="logoutform" method="POST" action="{% url 'logout' %}">
+                    <a class="nav-link text-white" href="#" onclick="document.getElementById('logoutform').submit()">Logout</a>
+                    <form id="logoutform" method="POST" action="{% url 'logout' %}">
                         {% csrf_token %}
-                        <input type="hidden">
-                      </form>
+                    </form>
                 </nav>
             </div>
-            <div class="col-md-9 p-4">
-                <div class="d-flex justify-content-end">
+
+            <!-- Main Content -->
+            <div class="col-md-9 offset-md-3 p-4" style="padding-left: 20px;">
+                <!-- Top Section with Alert Icon and User Welcome -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>Welcome, {{ user.username }}!</h2>
+                    <!-- Alert Bell Icon -->
                     <div class="dropdown">
                         <button class="btn btn-link text-dark position-relative" id="alertBell" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-bell" style="font-size: 24px;"></i>
-                            {% if total_alerts > 0 %}
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                {{ total_alerts }}
-                                <span class="visually-hidden">unread alerts</span>
+                            <i class="fas fa-bell fa-lg"></i>
+                            {% if unread_alerts_count > 0 %}
+                            <span class="badge bg-danger position-absolute top-0 start-100 translate-middle">
+                                {{ unread_alerts_count }}
                             </span>
                             {% endif %}
                         </button>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="alertBell">
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="alertBell" style="width: 300px;">
                             <li class="dropdown-header">Alerts</li>
-                            {% for alert in alerts %}
+                            {% for alert in recent_alerts %}
                             <li>
                                 <a class="dropdown-item" href="#">
-                                    <strong>{{ alert.title }}</strong><br>
-                                    <small>{{ alert.description }}</small>
+                                    <strong>{{ alert.report }}</strong><br>
+                                    <small>{{ alert.message }}</small>
+                                    <small class="text-muted d-block">Received {{ alert.date_generated|timesince }} ago</small>
                                 </a>
                             </li>
                             {% empty %}
@@ -54,7 +57,7 @@
                     </div>
                 </div>
 
-                <h2>Welcome, {{ user.username }}!</h2>
+                <!-- Dashboard Statistics -->
                 <div class="row mb-4">
                     <div class="col-md-4">
                         <div class="card">
@@ -82,17 +85,41 @@
                     </div>
                 </div>
 
-                <div class="mt-5">
+                <!-- Predictive Analytics Section -->
+                <div class="mb-4">
+                    <h4>Predictive Outbreak Analytics</h4>
+                    <div class="card">
+                        <div class="card-body">
+                            <canvas id="predictiveChart" style="height: 300px;"></canvas>
+                            <p>Forecasted areas with a high risk of outbreak. Resource allocation recommendations based on current data trends.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Suggested Actions -->
+                <div class="mb-4">
+                    <h4>Actionable Insights</h4>
+                    <ul class="list-group">
+                        <li class="list-group-item">Deploy medical units to high-risk zones.</li>
+                        <li class="list-group-item">Increase vaccination drives in forecasted outbreak areas.</li>
+                        <li class="list-group-item">Distribute PPE in densely populated regions.</li>
+                    </ul>
+                </div>
+
+                <!-- Incident Heatmap -->
+                <div class="mb-4">
                     <h4>Incident Heatmap</h4>
                     <div id="heatmap" style="height: 400px; border: 1px solid #ddd; border-radius: 5px;"></div>
                 </div>
 
-                <div class="mt-5">
+                <!-- Health Incident Trends -->
+                <div class="mb-4">
                     <h4>Health Incident Trends</h4>
                     <canvas id="trendChart"></canvas>
                 </div>
 
-                <h3>Recent Reports</h3>
+                <!-- Recent Reports Table -->
+                <h3 class="mt-4">Recent Reports</h3>
                 <table class="table">
                     <thead>
                         <tr>
@@ -121,7 +148,10 @@
         </div>
     </div>
 
+    <!-- Scripts -->
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="{% static 'js/popper.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> <!-- Bootstrap JS -->           
     <script src="{% static 'js/slim.js' %}"></script>
     <script src="{% static 'js/localversionBootstrap.js' %}"></script>
     <script src="{% static 'js/chart.js' %}"></script>

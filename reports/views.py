@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.http import JsonResponse
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -151,3 +152,23 @@ def submit_report(request):
 
     return render(request, 'reports/submit_report.html', {'form': form})
 
+
+@login_required
+def view_reports(request):
+    # Fetch reports, ordered by unresolved first
+    reports = HealthReport.objects.all().order_by('-resolved', '-date_reported')
+    return render(request, 'reports/view_reports.html', {'reports': reports})
+
+@login_required
+def toggle_report_field(request, report_id, field_name):
+    report = get_object_or_404(HealthReport, id=report_id)
+    
+    if field_name == 'resolved':
+        report.resolved = not report.resolved
+    elif field_name == 'is_verified':
+        report.is_verified = not report.is_verified
+    else:
+        return JsonResponse({'error': 'Invalid field'}, status=400)
+    
+    report.save()
+    return JsonResponse({'success': True, 'new_value': getattr(report, field_name)})
