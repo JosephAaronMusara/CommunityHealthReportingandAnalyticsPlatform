@@ -4,21 +4,31 @@
 <head>
     <meta charset="UTF-8">
     <title>View Health Reports</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
     <link href="{% static 'css/localversionBootstrap.css' %}" rel="stylesheet">
     <script src="{% static 'js/slim.js' %}"></script>
     <script src="{% static 'js/localversionBootstrap.js' %}"></script>
 </head>
 <body class="bg-light">
     <div class="container mt-4">
+        <a href="{% if user.userprofile.is_health_worker %}
+        {% url 'health_worker_dashboard' %}
+        {% else %}
+        {% url 'dashboard' %}
+        {% endif %}" class="back-arrow" data-toggle="tooltip" data-placement="right" title="Return to Dashboard">
+        <i class="fas fa-arrow-left"></i>
+    </a>
         <h1>Health Reports</h1>
         <table class="table table-bordered table-striped">
             <thead>
                 <tr>
                     <th>Incident Type</th>
                     <th>Location</th>
+                    <th>Date Reported</th>
+                    <th>Reporter</th>
                     <th>Resolved</th>
                     <th>Verified</th>
-                    <th>Date Reported</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -26,6 +36,8 @@
                 <tr>
                     <td>{{ report.incident_type.name }}</td>
                     <td>{{ report.location.name }}</td>
+                    <td>{{ report.date_reported|date:"Y-m-d H:i" }}</td>
+                    <td>{{ report.user.get_full_name }}</td>
                     <td>
                         <button class="btn btn-sm btn-toggle btn-outline-success" 
                                 data-id="{{ report.id }}" 
@@ -40,7 +52,9 @@
                             {% if report.is_verified %}Unverify{% else %}Verify{% endif %}
                         </button>
                     </td>
-                    <td>{{ report.date_reported|date:"Y-m-d H:i" }}</td>
+                    <td>
+                        <button style='font-size:24px'><i style='font-size:22px' class='far'>&#xf2bb;</i></button>
+                    </td>
                 </tr>
                 {% empty %}
                 <tr>
@@ -65,11 +79,10 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        // Update button text based on new field value
+                        console.log(data)
                         this.textContent = data.new_value ? 
                             (fieldName === 'resolved' ? 'Mark as Unresolved' : 'Unverify') :
                             (fieldName === 'resolved' ? 'Mark as Resolved' : 'Verify');
-                        // Optionally, update button style to reflect state change
                         this.classList.toggle('btn-outline-success', !data.new_value);
                         this.classList.toggle('btn-outline-danger', data.new_value);
                     } else {

@@ -27,10 +27,8 @@
 
             <!-- Main Content -->
             <div class="col-md-9 offset-md-3 p-4" style="padding-left: 20px;">
-                <!-- Top Section with Alert Icon and User Welcome -->
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h2>Welcome, {{ user.username }}!</h2>
-                    <!-- Alert Bell Icon -->
                     <div class="dropdown">
                         <button class="btn btn-link text-dark position-relative" id="alertBell" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fas fa-bell fa-lg"></i>
@@ -112,13 +110,13 @@
                     <div id="heatmap" style="height: 400px; border: 1px solid #ddd; border-radius: 5px;"></div>
                 </div>
 
-                <!-- Health Incident Trends -->
+                <!-- Health Incident Trends- to be worked on -->
                 <div class="mb-4">
                     <h4>Health Incident Trends</h4>
                     <canvas id="trendChart"></canvas>
                 </div>
 
-                <!-- Recent Reports Table -->
+                <!-- Recent Reports - last 5 only cz I have a seperate page for reports, without actions -->
                 <h3 class="mt-4">Recent Reports</h3>
                 <table class="table">
                     <thead>
