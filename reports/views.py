@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
+from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -72,10 +73,13 @@ def dashboard(request):
     """User dashboard for submitting and viewing health reports."""
     user_profile = get_object_or_404(UserProfile, user=request.user)
     reports = HealthReport.objects.filter(user=request.user)
+    messages = SystemContact.objects.filter(reporter=request.user).select_related('health_report').order_by('-date_sent')
+
     
     content = {
         'reports': reports,
         'user_profile': user_profile,
+        'messages': messages,
     }
     return render(request, 'reports/dashboard.html', content)
 
@@ -176,3 +180,25 @@ def toggle_report_field(request, report_id, field_name):
     
     report.save()
     return JsonResponse({'success': True, 'new_value': getattr(report, field_name)})
+
+
+@login_required
+def contact_reporter(request, report_id, method):
+    report = get_object_or_404(HealthReport, id=report_id)
+    reporter = report.user
+
+    if method == 'system':
+        if request.method == 'POST':
+            message_content = request.POST.get('message')
+            SystemContact.objects.create(reporter=reporter, message=message_content)
+            messages.success(request, "Message sent inside the system.")
+            return redirect('view_reports')
+        return render(request, 'reports/contact_reporter.html', {'report': report, 'reporter': reporter})
+
+    elif method == 'phone':
+        messages.info(request, f"Contact {reporter.profile.phone}")
+        return redirect('view_reports')
+
+    elif method == 'email':
+        messages.info(request, f"Contact via email: {reporter.email}")
+        return redirect('view_reports')
