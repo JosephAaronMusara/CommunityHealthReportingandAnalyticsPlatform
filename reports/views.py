@@ -189,7 +189,7 @@ def contact_reporter(request, report_id, method):
     if method == 'system':
         if request.method == 'POST':
             message_content = request.POST.get('message')
-            SystemContact.objects.create(reporter=reporter, message=message_content)
+            SystemContact.objects.create(reporter=reporter, message=message_content,health_report_id=report_id)
             messages.success(request, "Message sent inside the system.")
             return redirect('view_reports')
         return render(request, 'reports/contact_reporter.html', {'report': report, 'reporter': reporter})
