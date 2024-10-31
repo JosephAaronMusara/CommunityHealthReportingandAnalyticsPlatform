@@ -25,7 +25,6 @@ def login_view(request):
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
             user = authenticate(request, username=username, password=password)
-            print(user)
             if user is not None:
                 login(request, user)
                 # Check logged-in user type
@@ -164,7 +163,7 @@ def submit_report(request):
 @login_required
 def view_reports(request):
     # Fetch reports, ordered by unresolved first
-    reports = HealthReport.objects.all().order_by('-resolved', '-date_reported')
+    reports = HealthReport.objects.all().order_by('resolved', '-date_reported')
     return render(request, 'reports/view_reports.html', {'reports': reports})
 
 @login_required
