@@ -80,12 +80,11 @@ class Alert(models.Model):
 
     def __str__(self):
         return f"Alert for {self.report.incident_type.name} at {self.report.location.name}"
+class SystemContact(models.Model):
+    reporter = models.ForeignKey(User, on_delete=models.CASCADE)
+    health_report = models.ForeignKey(HealthReport, on_delete=models.CASCADE)
+    message = models.TextField()
+    date_sent = models.DateTimeField(auto_now_add=True)
 
-# @receiver(post_save, sender=User)
-# def create_user_profile(sender, instance, created, **kwargs):
-#     if created:
-#         UserProfile.objects.create(user=instance)
-
-# @receiver(post_save, sender=User)
-# def save_user_profile(sender, instance, **kwargs):
-#     instance.userprofile.save()
+    def __str__(self):
+        return f"Message to {self.reporter.username} on {self.date_sent}"
