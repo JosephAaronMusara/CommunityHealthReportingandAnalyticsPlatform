@@ -6,18 +6,13 @@
     <title>View Health Reports</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
     <link href="{% static 'css/localversionBootstrap.css' %}" rel="stylesheet">
-    <script src="{% static 'js/slim.js' %}"></script>
-    <script src="{% static 'js/localversionBootstrap.js' %}"></script>
 </head>
 <body class="bg-light">
     <div class="container mt-4">
-        <a href="{% if user.userprofile.is_health_worker %}
-        {% url 'health_worker_dashboard' %}
-        {% else %}
-        {% url 'dashboard' %}
-        {% endif %}" class="back-arrow" data-toggle="tooltip" data-placement="right" title="Return to Dashboard">
-        <i class="fas fa-arrow-left"></i>
-    </a>
+        <a href="{% if user.userprofile.is_health_worker %}{% url 'health_worker_dashboard' %}{% else %}{% url 'dashboard' %}{% endif %}" 
+           class="back-arrow" data-toggle="tooltip" data-placement="right" title="Return to Dashboard">
+           <i class="fas fa-arrow-left"></i>
+        </a>
         <h1>Health Reports</h1>
         <table class="table table-bordered table-striped">
             <thead>
@@ -53,18 +48,28 @@
                         </button>
                     </td>
                     <td>
-                        <button style='font-size:24px'><i style='font-size:22px' class='far'>&#xf2bb;</i></button>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" 
+                                    id="contactDropdown{{ report.id }}" data-bs-toggle="dropdown" 
+                                    aria-expanded="false" style="font-size:24px;">
+                                <i class="fas fa-envelope"></i>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="contactDropdown{{ report.id }}">
+                                <li><a class="dropdown-item" href="{% url 'contact_reporter' report.id 'system' %}">Inside the System</a></li>
+                                <li><a class="dropdown-item" href="tel:{{ report.user.profile.phone }}">Phone</a></li>
+                                <li><a class="dropdown-item" href="mailto:{{ report.user.email }}">Email</a></li>
+                            </ul>
+                        </div>
                     </td>
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="5" class="text-center">No reports available.</td>
+                    <td colspan="7" class="text-center">No reports available.</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
-
     <script>
         document.querySelectorAll('.btn-toggle').forEach(button => {
             button.addEventListener('click', function() {
@@ -92,5 +97,10 @@
             });
         });
     </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'js/slim.js' %}"></script>
+    <script src="{% static 'js/localversionBootstrap.js' %}"></script>
 </body>
 </html>
