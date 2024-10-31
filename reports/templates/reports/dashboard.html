@@ -62,7 +62,7 @@
             <ul class="list-group">
                 {% for message in messages %}
                     <li class="list-group-item">
-                        <strong>Related Report:</strong> {{ message.health_report.incident_type.name }}<br>
+                        <strong>Related Report:</strong> <i>{{ message.health_report.incident_type.name }}</i> with description <i>{{message.health_report.description}}</i> reported on <i>{{message.health_report.date_reported |date:"Y-m-d H:i"}}</i><br>
                         <strong>Message:</strong> {{ message.message }}<br>
                         <small class="text-muted">Sent on {{ message.date_sent|date:"Y-m-d H:i" }}</small>
                     </li>
