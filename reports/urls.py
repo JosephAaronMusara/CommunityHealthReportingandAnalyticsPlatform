@@ -14,4 +14,6 @@ urlpatterns = [
     path('submit_report/', views.submit_report, name='submit_report'),
     path('view_reports/', views.view_reports, name='view_reports'),
     path('report/toggle/<int:report_id>/<str:field_name>/', views.toggle_report_field, name='toggle_report_field'),
+    path('report/<int:report_id>/contact/<str:method>/', views.contact_reporter, name='contact_reporter'),
+
 ]
