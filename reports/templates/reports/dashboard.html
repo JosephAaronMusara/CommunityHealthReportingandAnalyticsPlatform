@@ -25,10 +25,10 @@
                         <a href="{% url 'profile' %}" class="nav-link">View Profile</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#" 
-                          onClick="document.getElementById('logoutform').submit()">
-                          Logout
-                        </a>
+                        <a href="#" class="nav-link" 
+                        onclick="if (confirmAction('Are you sure you want to logout?')) { document.getElementById('logoutform').submit(); }">
+                         Logout
+                     </a>
                       </li>
                       <form id="logoutform" method="POST" action="{% url 'logout' %}">
                         {% csrf_token %}
@@ -72,6 +72,12 @@
             </ul>
         </div>
     </div>
+    <script>
+        function confirmAction(message) {
+            return confirm(message);
+        }
+    </script>
+    
 
     <script src="{% static 'js/slim.js' %}"></script>
     <script src="{% static 'js/localversionBootstrap.js' %}"></script>

@@ -12,7 +12,8 @@
         <h2>New Health Report</h2>
         <p>Please fill out the form below to report a health incident.</p>
 
-        <form method="post" action="{% url 'submit_report' %}" class="mt-4">
+        <form method="post" action="{% url 'submit_report' %}" class="mt-4" onsubmit="return confirmAction('Are you sure you want to submit this report?');">
+            
             {% csrf_token %}
             <div class="form-group">
                 <label for="incident_type">Incident Type</label>
@@ -36,6 +37,11 @@
             " class="btn btn-secondary ml-2">Cancel</a>
         </form>
     </div>
+    <script>
+        function confirmAction(message) {
+            return confirm(message);
+        }
+    </script>    
     <script src="{% static 'js/slim.js' %}"></script>
     <script src="{% static 'js/localversionBootstrap.js' %}"></script>
 </body>

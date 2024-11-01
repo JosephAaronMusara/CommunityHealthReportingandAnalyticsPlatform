@@ -201,3 +201,8 @@ def contact_reporter(request, report_id, method):
     elif method == 'email':
         messages.info(request, f"Contact via email: {reporter.email}")
         return redirect('view_reports')
+
+
+def view_report(request, report_id):
+    report = get_object_or_404(HealthReport, id=report_id)
+    return render(request, 'reports/view_single_report.html', {'report': report})

@@ -12,17 +12,27 @@
 </head>
 <body>
 
+    <!-- Navbar with Login and Register links -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="#">Health Reporting Platform</a>
+            <div class="ml-auto">
+                <a href="{% url 'login' %}" class="nav-link d-inline">Login</a>
+                <span>|</span>
+                <a href="{% url 'register' %}" class="nav-link d-inline">Register</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
     <div class="hero-section">
         <div class="container">
             <h1>Welcome to the Health Reporting Platform</h1>
             <p>Your one-stop solution for tracking and reporting health issues in your community.</p>
-            <div class="cta-buttons">
-                <a href="{% url 'register' %}" class="btn btn-primary btn-lg">Register</a>
-                <a href="{% url 'login' %}" class="btn btn-primary btn-lg">Login</a>
-            </div>
         </div>
     </div>
 
+    <!-- Main Content -->
     <div class="container mt-5">
         <div class="row">
             <div class="col-md-4 text-center">
@@ -43,6 +53,7 @@
         </div>
     </div>
 
+    <!-- Footer -->
     <footer class="mt-5 py-4 bg-dark text-white text-center">
         <div class="container">
             <p>&copy; {% now "Y" %} Uncle Joe. All rights reserved.</p>

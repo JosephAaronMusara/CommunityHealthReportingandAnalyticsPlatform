@@ -14,15 +14,15 @@
            <i class="fas fa-arrow-left"></i>
         </a>
         <h1>Health Reports</h1>
-        <table class="table table-bordered table-striped">
+        <table class="table table-bordered table-striped" style="font-size:small">
             <thead>
                 <tr>
                     <th>Incident Type</th>
                     <th>Location</th>
                     <th>Date Reported</th>
                     <th>Reporter</th>
-                    <th>Resolved</th>
-                    <th>Verified</th>
+                    {% comment %} <th>Resolved</th>
+                    <th>Verified</th> {% endcomment %}
                     <th>Action</th>
                 </tr>
             </thead>
@@ -39,27 +39,28 @@
                                 data-field="resolved">
                             {% if report.resolved %}Mark as Unresolved{% else %}Mark as Resolved{% endif %}
                         </button>
-                    </td>
-                    <td>
+                    {% comment %} </td>
+                    <td> {% endcomment %}
                         <button class="btn btn-sm btn-toggle btn-outline-primary" 
                                 data-id="{{ report.id }}" 
                                 data-field="is_verified">
                             {% if report.is_verified %}Unverify{% else %}Verify{% endif %}
                         </button>
-                    </td>
-                    <td>
-                        <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" 
+                    {% comment %} </td>
+                    <td> {% endcomment %}
+                        <button class="btn btn-secondary" type="button"> <i style="font-size:24px" class="fa">&#xf1c1;</i></button>
+                        {% comment %} <div class="dropdown" style="width:5px;"> {% endcomment %}
+                            <button style="size:20px;" class="btn btn-secondary dropdown-toggle" type="button" 
                                     id="contactDropdown{{ report.id }}" data-bs-toggle="dropdown" 
-                                    aria-expanded="false" style="font-size:24px;">
+                                    aria-expanded="false" style="font-size:20px;">
                                 <i class="fas fa-envelope"></i>
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="contactDropdown{{ report.id }}">
                                 <li><a class="dropdown-item" href="{% url 'contact_reporter' report.id 'system' %}">Inside the System</a></li>
-                                <li><a class="dropdown-item" href="tel:{{ report.user.profile.phone }}">Phone</a></li>
+                                <li><a class="dropdown-item" href="tel:{{ report.user.userprofile.phone_number }}">Phone</a></li>
                                 <li><a class="dropdown-item" href="mailto:{{ report.user.email }}">Email</a></li>
                             </ul>
-                        </div>
+                        {% comment %} </div> {% endcomment %}
                     </td>
                 </tr>
                 {% empty %}

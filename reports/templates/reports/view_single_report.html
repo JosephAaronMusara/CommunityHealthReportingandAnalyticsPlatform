@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Report Detail</title>
+    <link href="{% static 'css/localversionBootstrap.css' %}" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Report Detail</h2>
+        <p><strong>Incident Type:</strong> {{ report.incident_type }}</p>
+        <p><strong>Location:</strong> {{ report.location }}</p>
+        <p><strong>Reported By:</strong> {{ report.user.get_full_name }}</p>
+        <p><strong>Date Reported:</strong> {{ report.date_reported }}</p>
+        <p><strong>Description:</strong> {{ report.description }}</p>
+        <a href="{% url 'view_reports' %}" class="btn btn-secondary mt-3">Back to Reports</a>
+    </div>
+</body>
+</html>
