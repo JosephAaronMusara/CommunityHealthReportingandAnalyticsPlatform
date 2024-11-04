@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,6 +12,8 @@
         <p><strong>Location:</strong> {{ report.location }}</p>
         <p><strong>Reported By:</strong> {{ report.user.get_full_name }}</p>
         <p><strong>Date Reported:</strong> {{ report.date_reported }}</p>
+        <p><strong>Verified:</strong> {% if report.is_verified %}Verified{%else%}Not Yet{%endif%}</p>
+        <p><strong>Resolved:</strong> {% if report.resolved %}Resolved{%else%}Not Yet{%endif%}</p>
         <p><strong>Description:</strong> {{ report.description }}</p>
         <a href="{% url 'view_reports' %}" class="btn btn-secondary mt-3">Back to Reports</a>
     </div>

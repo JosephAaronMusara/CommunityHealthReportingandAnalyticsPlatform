@@ -21,8 +21,8 @@
                     <th>Location</th>
                     <th>Date Reported</th>
                     <th>Reporter</th>
-                    {% comment %} <th>Resolved</th>
-                    <th>Verified</th> {% endcomment %}
+                    <th>Resolved</th>
+                    <th>Verified</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -39,16 +39,16 @@
                                 data-field="resolved">
                             {% if report.resolved %}Mark as Unresolved{% else %}Mark as Resolved{% endif %}
                         </button>
-                    {% comment %} </td>
-                    <td> {% endcomment %}
+                    </td>
+                    <td>
                         <button class="btn btn-sm btn-toggle btn-outline-primary" 
                                 data-id="{{ report.id }}" 
                                 data-field="is_verified">
                             {% if report.is_verified %}Unverify{% else %}Verify{% endif %}
                         </button>
-                    {% comment %} </td>
-                    <td> {% endcomment %}
-                        <button class="btn btn-secondary" type="button"> <i style="font-size:24px" class="fa">&#xf1c1;</i></button>
+                    </td>
+                    <td>
+                        <a href={% url 'view_single_report' report.id %}><button class="btn btn-secondary" type="button"> <i style="font-size:24px" class="fa">&#xf1c1;</i></button></a>
                         {% comment %} <div class="dropdown" style="width:5px;"> {% endcomment %}
                             <button style="size:20px;" class="btn btn-secondary dropdown-toggle" type="button" 
                                     id="contactDropdown{{ report.id }}" data-bs-toggle="dropdown" 
